@@ -1,0 +1,18 @@
+{
+  "ruleset": "dnd5r-2024",
+  "identity": { "name": "烬羽" },
+  "classes": [{ "classId": "bard", "level": 5 }],
+  "abilities": { "str": 8, "dex": 16, "con": 14, "int": 10, "wis": 12, "cha": 18 },
+  "proficiencies": { "savingThrows": ["dex", "cha"] },
+  "skills": {
+    "performance": { "ability": "cha", "proficient": true, "expertise": true },
+    "persuasion": { "ability": "cha", "proficient": true, "expertise": false },
+    "perception": { "ability": "wis", "proficient": false, "expertise": false }
+  },
+  "equipment": {
+    "armor": { "id": "studded-leather", "category": "light", "base": 12 },
+    "shield": false
+  },
+  "spellcasting": { "ability": "cha", "dcBonus": 0, "attackBonus": 0 },
+  "adjustments": { "armorClass": [], "hitPoints": [], "savingThrows": {}, "initiative": 0 }
+}

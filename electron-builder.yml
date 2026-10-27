@@ -1,0 +1,66 @@
+appId: com.inkdice.characterstudio
+productName: InkDice
+copyright: 墨骰工坊
+electronVersion: 45.0.0
+directories:
+  output: release
+  buildResources: desktop/assets
+asar: true
+npmRebuild: false
+beforePack: desktop/installer-policy.mjs
+files:
+  - prototype/**
+  - packages/**
+  - desktop/main.mjs
+  - desktop/preload.cjs
+  - desktop/protocol.mjs
+  - desktop/project-links.mjs
+  - desktop/library-bootstrap.mjs
+  - desktop/assets/icon.ico
+  - tools/library.mjs
+  - tools/feature-import.mjs
+  - tools/species-mapping.mjs
+  - tools/library-provenance.mjs
+  - tools/species-repair.mjs
+  - tools/ai-test.mjs
+  - tools/ai-chat.mjs
+  - package.json
+  - '!node_modules/**'
+  - '!local-data/**'
+  - '!**/*.sqlite'
+extraResources:
+  - from: local-data/content-library.sqlite
+    to: library/content-library.sqlite
+  - from: desktop/使用说明.txt
+    to: 使用说明.txt
+  - from: desktop/安装与升级说明.txt
+    to: 安装与升级说明.txt
+electronFuses:
+  runAsNode: false
+  enableNodeOptionsEnvironmentVariable: false
+  enableNodeCliInspectArguments: false
+  enableEmbeddedAsarIntegrityValidation: true
+  onlyLoadAppFromAsar: true
+win:
+  target:
+    - nsis
+    - zip
+  icon: desktop/assets/icon.ico
+  artifactName: InkDice-${version}-win-${arch}.${ext}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 墨骰工坊
+  menuCategory: 墨骰工坊
+  uninstallDisplayName: 墨骰工坊 ${version}
+  installerLanguages:
+    - zh_CN
+  language: 2052
+  include: desktop/installer.nsh
+  artifactName: InkDice-Setup-${version}-win-${arch}.${ext}
+  differentialPackage: false

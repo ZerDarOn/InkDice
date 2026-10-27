@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="墨骰工坊：骰面与笔尖">
+<rect x="4" y="4" width="248" height="248" rx="48" fill="#171C24"/>
+<g fill="none" stroke="#826F4D" stroke-width="5" stroke-linejoin="round"><polyline points="40,78 83,111 40,178"/><polyline points="216,78 173,111 216,178"/><polyline points="40,178 96,181 128,229 160,181 216,178"/></g>
+<polygon points="128,27 216,78 216,178 128,229 40,178 40,78" fill="none" stroke="#E2BC72" stroke-width="9" stroke-linejoin="round"/>
+<polygon points="128,64 162,119 150,164 128,189 106,164 94,119" fill="#E2BC72"/>
+<path d="M128 65V121" stroke="#171C24" stroke-width="6"/>
+<circle cx="128" cy="128" r="10" fill="#171C24"/>
+</svg>

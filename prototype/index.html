@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <title>墨骰工坊 · 人物档案</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/inkdice-logo.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./summary-layout.css" />
+    <link rel="stylesheet" href="./coc/styles.css" />
+    <link rel="stylesheet" href="./polish.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#mainWorkspace">跳到人物编辑区</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="人物导航">
+        <div class="brand">
+          <img class="brand-logo" src="./assets/inkdice-logo.svg" alt="" width="32" height="32" />
+          <div class="brand-copy"><strong>墨骰工坊</strong><span>InkDice</span></div>
+          <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="收起人物栏" aria-expanded="true" aria-controls="characterList" title="收起人物栏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.7 5.3 1.4 1.4-5.3 5.3 5.3 5.3-1.4 1.4L8 12l6.7-6.7Z"/></svg></button>
+        </div>
+        <button id="newCharacter" class="new-character" type="button" aria-label="新建人物" title="新建人物"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg><span>新建人物</span></button>
+        <p class="sidebar-label">人物</p>
+        <div id="characterList" class="character-list" aria-label="人物列表"></div>
+        <div class="sidebar-bottom">
+          <p class="brand-watermark">墨骰工坊 · InkDice</p>
+          <button id="aboutButton" class="quiet-button" type="button" aria-haspopup="dialog" title="关于墨骰工坊" aria-label="关于墨骰工坊"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm-1 6h2v7h-2v-7Zm0-3h2v2h-2V7Z"/></svg><span>关于墨骰工坊</span></button>
+          <button id="libraryButton" class="library-button" type="button" aria-haspopup="dialog" aria-controls="libraryDialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5v-17ZM6.5 4A.5.5 0 0 0 6 4.5v13.6c.2-.1.4-.1.5-.1H18V4H6.5ZM6 21.5a.5.5 0 0 1 .5-.5H20v2H6.5A2.5 2.5 0 0 1 4 20.5h2v1Z"/></svg><span><strong>资料库</strong><small id="libraryButtonEdition">当前卡 · 本机导入</small></span></button>
+          <button id="settingsButton" class="system-button" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19.4 13 .1-1-.1-1 2-1.6-2-3.5-2.5 1a8 8 0 0 0-1.7-1L14.8 3h-4l-.4 2.7a8 8 0 0 0-1.7 1l-2.5-1-2 3.5 2 1.7-.1 1 .1 1-2 1.7 2 3.5 2.5-1a8 8 0 0 0 1.7 1l.4 2.7h4l.4-2.7a8 8 0 0 0 1.7-1l2.5 1 2-3.5-2-1.6ZM12.8 19h-1.6l-.3-2.2-.6-.2a6 6 0 0 1-1.1-.7l-.5-.4-2 .8-.8-1.4 1.7-1.4-.1-.6a6 6 0 0 1 0-1.4l.1-.6L6 9.4 6.8 8l2 .8.5-.4a6 6 0 0 1 1.1-.7l.6-.2.3-2.2h1.6l.3 2.2.6.2a6 6 0 0 1 1.1.7l.5.4 2-.8.8 1.4-1.7 1.4.1.6a6 6 0 0 1 0 1.4l-.1.6 1.7 1.4-.8 1.4-2-.8-.5.4a6 6 0 0 1-1.1.7l-.6.2-.4 2.2ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg>
+            <span><strong>设置与扩展</strong><small id="currentSystemName">已载入：5E、5R</small></span>
+          </button>
+          <button id="themeToggle" class="quiet-button" type="button" aria-pressed="false" aria-label="切换明暗主题" title="切换明暗主题"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36A7 7 0 0 1 12.36 3H12Z"/></svg><span>切换明暗主题</span></button>
+        </div>
+      </aside>
+
+      <main class="workspace" id="mainWorkspace" tabindex="-1">
+        <header class="topbar">
+          <div class="title-block"><p><span id="editionBreadcrumb">5R · 2024</span><span id="pageBreadcrumb" class="title-divider">人物</span></p><h1 id="characterTitle">未命名角色</h1></div>
+          <div class="top-actions">
+            <span id="saveStatus" class="status"><i></i> 已保存</span>
+            <input id="importFile" type="file" accept="application/json,.json" hidden />
+            <button id="importButton" class="secondary icon-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4h2v9l3-3 1.4 1.4L12 16.8l-5.4-5.4L8 10l3 3V4ZM5 18h14v2H5v-2Z"/></svg>导入</button>
+            <button id="exportButton" class="secondary icon-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20h2v-9l3 3 1.4-1.4L12 7.2l-5.4 5.4L8 14l3-3v9ZM5 4h14v2H5V4Z"/></svg>导出</button>
+            <button id="printButton" class="secondary icon-only" type="button" aria-label="打印人物摘要" title="打印人物摘要"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v4h2a2 2 0 0 1 2 2v7h-4v5H7v-5H3V9a2 2 0 0 1 2-2h2V3Zm2 2v2h6V5H9Zm0 10v4h6v-4H9Zm8-5v2h2V9H5v5h2v-1h10v1h2v-4h-2Z"/></svg></button>
+            <button id="saveButton" class="primary" type="button">保存</button>
+          </div>
+        </header>
+        <section class="stat-ribbon" aria-label="关键派生数值">
+          <button data-trace="armorClass"><span>护甲等级</span><strong id="statAc">—</strong><small id="statAcHint">—</small></button>
+          <button data-trace="hitPoints"><span>最大生命值</span><strong id="statHp">—</strong><small id="statHpHint">—</small></button>
+          <button data-trace="initiative"><span>先攻</span><strong id="statInitiative">—</strong><small>敏捷</small></button>
+          <button data-trace="proficiencyBonus"><span>熟练加值</span><strong id="statProficiency">—</strong><small id="statLevelHint">—</small></button>
+          <button data-trace="passivePerception"><span>被动察觉</span><strong id="statPassive">—</strong><small>10 + 察觉</small></button>
+          <button data-trace="spellSaveDc"><span>法术豁免 DC</span><strong id="statSpellDc">—</strong><small id="statCastingHint">职业默认</small></button>
+        </section>
+
+        <div class="content-scroll" id="contentScroll">
+          <div id="errorSummary" class="error-summary" role="alert" tabindex="-1" hidden><h2>请先处理以下问题</h2><ul id="errorSummaryList"></ul></div>
+          <form id="characterForm" novalidate>
+            <div class="workspace-page is-active" data-page-panel="character">
+              <section class="page-intro"><div><p>人物</p><h2>身份、外貌与经历</h2><span>按照原表“角色”页整理；职业数值与战斗资料移至“主要情况”。</span></div></section>
+              <div class="character-dossier-grid">
+                <section class="sheet-section appearance-dossier" aria-labelledby="identityHeading">
+                  <div class="section-heading"><div><h2 id="identityHeading">外貌与身份</h2><p>对应原表的角色基础资料与外观区域</p></div><span class="completion" id="identityCompletion">待填写</span></div>
+                  <div class="identity-name-strip">
+                    <label class="ledger-input"><span>人物名称</span><input id="name" name="name" type="text" maxlength="60" autocomplete="off" /><small id="nameError" class="field-error"></small></label>
+                    <label class="ledger-input"><span>玩家名称</span><input id="player" name="player" type="text" maxlength="60" autocomplete="off" /></label>
+                  </div>
+                  <div class="appearance-field-pairs">
+                    <div class="appearance-field-group">
+                      <label class="ledger-input"><span>种族</span><input id="species" name="species" data-suggest-kind="species" maxlength="80" placeholder="输入或搜索种族" /></label>
+                      <label class="ledger-input"><span>性别</span><input id="gender" name="gender" maxlength="40" /></label>
+                      <label class="ledger-input"><span>亚种</span><input id="subrace" name="subrace" maxlength="80" /></label>
+                    </div>
+                    <div class="appearance-field-group">
+                      <label class="ledger-input"><span>阵营</span><input id="alignment" name="alignment" maxlength="60" /></label>
+                      <label class="ledger-input"><span>年龄</span><input id="age" name="age" maxlength="40" /></label>
+                      <label class="ledger-input"><span>信仰</span><input id="faith" name="faith" maxlength="80" /></label>
+                    </div>
+                    <div class="appearance-field-group">
+                      <label class="ledger-input"><span>背景</span><input id="background" name="background" data-suggest-kind="background" maxlength="120" placeholder="输入关键词或自定义背景" /></label>
+                      <label class="ledger-input"><span>身高</span><input id="height" name="height" maxlength="40" /></label>
+                      <label class="ledger-input"><span>体重</span><input id="weight" name="weight" maxlength="40" /></label>
+                    </div>
+                    <div class="appearance-field-group">
+                      <label class="ledger-input"><span>发色</span><input id="hair" name="hair" maxlength="60" /></label>
+                      <label class="ledger-input"><span>肤色</span><input id="skin" name="skin" maxlength="60" /></label>
+                      <label class="ledger-input"><span>瞳色</span><input id="eyes" name="eyes" maxlength="60" /></label>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sheet-section background-dossier" aria-labelledby="backgroundHeading">
+                  <div class="section-heading"><div><h2 id="backgroundHeading">背景档案</h2><p>熟练、背景特性与人物经历</p></div></div>
+                  <div class="background-detail-table">
+                    <label class="ledger-input"><span>背景技能熟练</span><input id="backgroundSkillProficiencies" name="backgroundSkillProficiencies" maxlength="500" /></label>
+                    <label class="ledger-input"><span>背景工具熟练</span><input id="backgroundToolProficiencies" name="backgroundToolProficiencies" maxlength="500" /></label>
+                    <label class="ledger-input"><span>背景语言</span><input id="backgroundLanguages" name="backgroundLanguages" maxlength="500" /></label>
+                    <label class="ledger-input"><span>背景装备</span><input id="backgroundEquipment" name="backgroundEquipment" maxlength="1000" /></label>
+                    <label class="ledger-input"><span>背景特殊选项</span><input id="backgroundSpecialOptions" name="backgroundSpecialOptions" maxlength="2000" /></label>
+                    <label class="ledger-textarea feature-row"><span>背景特性</span><textarea id="backgroundFeature" name="backgroundFeature" rows="5" maxlength="2000"></textarea></label>
+                    <label class="ledger-input"><span>个性特点 I</span><input id="personality" name="personality" maxlength="500" /></label>
+                    <label class="ledger-input"><span>个性特点 II</span><input id="personalityTwo" name="personalityTwo" maxlength="500" /></label>
+                    <label class="ledger-input"><span>理想</span><input id="ideal" name="ideal" maxlength="300" /></label>
+                    <label class="ledger-input"><span>牵绊</span><input id="bond" name="bond" maxlength="300" /></label>
+                    <label class="ledger-input"><span>缺点</span><input id="flaw" name="flaw" maxlength="300" /></label>
+                    <label class="ledger-textarea story-row"><span>背景故事</span><textarea id="backgroundStory" name="backgroundStory" rows="6" maxlength="3000"></textarea></label>
+                  </div>
+                </section>
+              </div>
+
+            </div>
+
+            <div class="workspace-page" data-page-panel="summary" hidden>
+              <section class="page-intro"><div><p>主要情况</p><h2>规则、检定与战斗总览</h2><span>对应原表“主要情况”：职业、属性、战斗、技能、装备与特性都集中在这里。</span></div></section>
+              <section class="sheet-section compact-section" aria-labelledby="rulesHeading">
+                <div class="section-heading"><div><h2 id="rulesHeading">职业与等级</h2></div><span class="source-pill" id="sourcePack">SRD 5.2.1 核心</span></div>
+                <div class="form-grid summary-header-grid"><label class="field"><span>规则版本（已固定）</span><input id="rulesetDisplay" type="text" readonly title="创建时确定；使用另一版本请新建人物。已有内容不会自动转换。" /></label><label class="field"><span>初始职业</span><select id="classId" name="classId"></select></label><label class="field"><span>职业等级</span><input id="level" name="level" type="number" min="1" max="20" step="1" inputmode="numeric" /><small id="levelError" class="field-error"></small></label><label class="field"><span>子职业</span><input id="subclass" name="subclass" list="subclassOptions" maxlength="120" placeholder="选择或输入子职" /><datalist id="subclassOptions"></datalist></label><label class="field"><span>经验值</span><input id="experience" aria-describedby="experienceSummary" name="experience" type="number" min="0" step="1" inputmode="numeric" /></label><label class="field"><span>体型</span><select id="size" name="size"><option>微型</option><option>小型</option><option selected>中型</option><option>大型</option><option>巨型</option><option>超巨型</option></select></label></div>
+                <details class="experience-reference">
+                  <summary><strong>等级经验表</strong><span id="experienceSummary"></span></summary>
+                  <div class="experience-reference-body">
+                    <p id="experienceNote"></p>
+                    <div id="experienceTable" class="experience-table-grid"></div>
+                    <p id="experienceSource" class="experience-source"></p>
+                  </div>
+                </details>
+                <div class="class-progression-panel"><div class="class-progression-heading"><span id="classLevelSummary"></span><button type="button" id="addMulticlass">＋ 添加兼职</button></div><div id="multiclassRows"></div><p id="classPrerequisiteNote" class="class-prerequisite-note" role="status" hidden></p><details class="class-starting-details"><summary>职业熟练与可选项</summary><div id="classStartingInfo"></div></details></div>
+                <div class="rule-summary"><span>生命骰 <strong id="hitDieSummary">—</strong></span><span>豁免熟练 <strong id="saveSummary">—</strong></span><span>施法属性 <strong id="castingSummary">—</strong></span></div>
+              </section>
+              <section class="sheet-section compact-section workbook-equipment" aria-labelledby="weaponsHeading">
+                <div class="section-heading"><div><h2 id="weaponsHeading">武器</h2><p>按需增删；同调与装备共享计数。</p></div><div class="weapon-heading-actions"><button type="button" data-add-weapon aria-label="添加武器" title="添加武器">＋</button><div id="attunementCounter" class="attunement-counter" aria-label="已同调的装备数量"><span>已同调的装备</span><strong><b id="attunementCount">0</b><i>/</i>3</strong></div></div></div>
+                <div class="weapon-meta"><label>自定义武器默认属性<select id="weaponAttackAbility" name="weaponAttackAbility" title="标准武器自动判断力量、敏捷和灵巧；每条武器还可单独覆盖属性"><option value="str">力量</option><option value="dex">敏捷</option></select></label><label>弹药<input id="ammunitionName" name="ammunitionName" maxlength="60" placeholder="箭矢 / 弩矢…" /></label><label>数量<input id="ammunitionCount" name="ammunitionCount" type="number" min="0" step="1" /></label><label>速度（尺）<input id="speed" name="speed" type="number" min="0" max="200" step="5" /></label></div>
+                <div class="weapon-ledger"><div class="weapon-ledger-head" aria-hidden="true"><span>武器类型</span><span>同调</span><span>名称</span><span>加值</span><span>特性</span><span>熟练</span><span>攻击骰</span><span>伤害骰</span><span>类型</span><span>附加伤害骰</span><span>类型</span><span>精通</span><span>效果</span></div><div id="weaponRows"></div></div>
+              </section>
+              <div class="main-sheet-columns">
+                <div class="main-sheet-column main-sheet-left">
+                  <section class="sheet-section compact-section" aria-labelledby="abilitiesHeading"><div class="section-heading"><div><h2 id="abilitiesHeading">属性与豁免</h2><p>六维数值与调整值</p></div><span class="completion">6 项</span></div><div id="abilityGrid" class="ability-editor"></div></section>
+                  <section class="sheet-section compact-section" aria-labelledby="skillsHeading"><div class="section-heading"><div><h2 id="skillsHeading">技能</h2><p>点击切换熟练等级</p></div><span id="skillCount" class="completion">0 项熟练</span></div><div id="skillGrid" class="skill-grid"></div></section>
+                </div>
+                <div class="main-sheet-detail">
+                <section class="sheet-section compact-section workbook-equipment" aria-labelledby="equipmentHeading">
+                  <div class="section-heading"><div><h2 id="equipmentHeading">装备</h2><p>护甲、盾牌与十个其他装备位置；同调与武器合并计数。</p></div></div>
+                  <div class="armor-ledger"><div class="armor-ledger-head" aria-hidden="true"><span>护甲类型</span><span>同调</span><span>名称</span><span>加值</span><span>特性</span><span>AC</span><span>敏捷加值</span></div><div class="armor-ledger-row"><select id="armorId" name="armorId" aria-label="护甲类型"></select><label class="ledger-check"><input id="equipmentArmorAttuned" name="equipmentArmorAttuned" type="checkbox" aria-label="护甲同调" /></label><input id="equipmentArmor" name="equipmentArmor" maxlength="160" aria-label="护甲名称" /><input id="armorBonus" name="armorBonus" type="number" min="-5" max="10" aria-label="护甲加值" /><input id="armorProperty" name="armorProperty" maxlength="500" aria-label="护甲特性" /><output id="armorBaseAc" aria-label="护甲 AC">—</output><output id="armorDexBonus" aria-label="护甲敏捷加值">—</output></div></div>
+                  <div class="shield-ledger"><strong>盾牌</strong><label>名称<input id="shieldName" name="shieldName" maxlength="160" /></label><label class="inline-check">同调<input id="shieldAttuned" name="shieldAttuned" type="checkbox" /></label><label>AC<input id="shieldAcBonus" name="shieldAcBonus" type="number" min="0" max="10" /></label><label class="inline-check">着装<input id="shield" name="shield" type="checkbox" /></label></div>
+                  <div class="curio-ledger"><div class="curio-ledger-head" aria-hidden="true"><span>奇物</span><span>同调</span><span>稀有度</span><span>部位</span><span>特性</span></div><div id="curioRows"></div></div>
+                </section>
+                <div class="main-sheet-column main-sheet-center">
+                  <section class="sheet-section compact-section" aria-labelledby="combatHeading"><div class="section-heading"><div><h2 id="combatHeading">战斗数据</h2><p>现有值与上限</p></div></div><div class="combat-data-grid">
+                    <label class="metric-field"><span>当前生命</span><input id="currentHp" name="currentHp" type="number" min="0" /></label><div class="metric-output"><span>最大生命</span><strong id="combatMaxHp">—</strong></div><label class="metric-field"><span>临时生命</span><input id="tempHp" name="tempHp" type="number" min="0" /></label><div class="metric-output"><span>先攻</span><strong id="combatInitiative">—</strong></div><div class="metric-output"><span>护甲等级</span><strong id="combatArmorClass">—</strong></div><label class="metric-field"><span>生命骰现有</span><input id="hitDiceCurrent" name="hitDiceCurrent" type="number" min="0" /></label><div class="metric-output"><span>生命骰上限</span><strong id="combatHitDiceMax">—</strong></div><div class="metric-output"><span>职业 DC</span><strong id="combatClassDc">—</strong></div>
+                  </div><label class="combat-senses-field"><span>抗性、免疫与感官</span><textarea id="defensesSenses" name="defensesSenses" rows="2" maxlength="2000"></textarea></label></section>
+                </div>
+                <div class="main-sheet-column main-sheet-right">
+                  <div class="feature-sheet-grid">
+                    <section class="sheet-section compact-section feature-ledger" aria-labelledby="classFeaturesHeading"><div class="section-heading"><h2 id="classFeaturesHeading">职业能力</h2><div class="feature-actions"><button type="button" id="fillClassFeatures" title="按各职业等级补入主职与子职能力，不覆盖手改记录；多选项仍需自行选择">补入可用能力（含子职）</button><button type="button" data-add-feature="class" aria-label="添加职业能力">＋ 添加</button></div></div><p id="classImportStatus" class="feature-import-status" role="status"></p><div class="feature-column-head"><span>LV</span><span>名称</span><span>描述</span></div><div id="classFeatureRows"></div></section>
+                    <section class="sheet-section compact-section feature-ledger feature-no-level" aria-labelledby="speciesFeaturesHeading"><div class="section-heading"><h2 id="speciesFeaturesHeading">种族特性</h2><div class="feature-actions"><button type="button" id="fillSpeciesFeatures" title="补入当前种族与亚种的特性说明，不覆盖手改记录；自选项目仍需自行选择">补入种族特性</button><button type="button" data-add-feature="species" aria-label="添加种族特性">＋ 添加</button></div></div><p id="speciesImportStatus" class="feature-import-status" role="status"></p><div class="feature-column-head"><span>名称</span><span>描述</span></div><div id="speciesFeatureRows"></div></section>
+                    <section class="sheet-section compact-section feature-ledger" aria-labelledby="featsHeading"><div class="section-heading"><h2 id="featsHeading">专长</h2><button type="button" data-add-feature="feat" aria-label="添加专长">＋ 添加</button></div><div class="feature-column-head"><span>LV</span><span>名称</span><span>描述</span></div><div id="featRows"></div></section>
+                    <section class="sheet-section compact-section feature-ledger feature-no-level" aria-labelledby="stylesHeading"><div class="section-heading"><h2 id="stylesHeading">战斗风格</h2><button type="button" data-add-feature="fighting" aria-label="添加战斗风格">＋ 添加</button></div><div class="feature-column-head"><span>名称</span><span>描述</span></div><div id="fightingFeatureRows"></div></section>
+                    <section class="sheet-section compact-section feature-ledger feature-no-level feature-special" aria-labelledby="specialHeading"><div class="section-heading"><h2 id="specialHeading">特殊能力</h2><button type="button" data-add-feature="special" aria-label="添加特殊能力">＋ 添加</button></div><div class="feature-column-head"><span>名称</span><span>描述</span></div><div id="specialFeatureRows"></div></section>
+                  </div>
+                  <div class="summary-reference-grid">
+                    <section class="sheet-section compact-section reference-ledger" aria-labelledby="proficiencyHeading"><div class="section-heading"><h2 id="proficiencyHeading">武器及护甲熟练</h2></div><label><span>武器</span><input id="weaponProficiencies" name="weaponProficiencies" maxlength="1000" /></label><label><span>护甲</span><input id="armorTraining" name="armorTraining" maxlength="1000" /></label><label><span>语言</span><input id="knownLanguages" name="knownLanguages" maxlength="1000" /></label><label><span>工具</span><input id="toolProficiencies" name="toolProficiencies" maxlength="1000" /></label></section>
+                    <section class="sheet-section compact-section reference-ledger" aria-labelledby="otherTraitsHeading"><div class="section-heading"><h2 id="otherTraitsHeading">其他特性</h2></div><label><span>激励</span><input id="inspiration" name="inspiration" maxlength="40" /></label><label><span>伤患</span><input id="injuries" name="injuries" maxlength="500" /></label><label><span>声望</span><input id="renown" name="renown" maxlength="500" /></label><label><span>献力</span><input id="piety" name="piety" maxlength="500" /></label><label><span>祝福</span><input id="blessings" name="blessings" maxlength="500" /></label><label><span>护咒</span><input id="charms" name="charms" maxlength="500" /></label><label><span>传奇恩惠</span><input id="epicBoons" name="epicBoons" maxlength="500" /></label></section>
+                    <section class="sheet-section compact-section reference-ledger reference-load" aria-labelledby="loadHeading"><div class="section-heading"><h2 id="loadHeading">负重与随身钱币</h2></div><div class="load-facts"><label>装备重量<input id="equipmentLoad" name="equipmentLoad" type="number" min="0" step="0.1" placeholder="待填写" aria-label="装备重量（磅）" /></label><span>背包重量 <strong id="inventoryWeightSummary">0 磅</strong></span><span>钱币重量 <strong id="coinWeightSummary">0 磅</strong></span><span>已记录负重 <strong id="recordedWeightSummary">0 磅</strong></span><label>最大载重<input id="carryingCapacity" name="carryingCapacity" type="number" min="0" step="0.1" placeholder="待填写" aria-label="最大载重（磅）" /></label></div><div class="coin-facts"><span>PP <strong id="summaryPp">0</strong></span><span>GP <strong id="summaryGp">0</strong></span><span>EP <strong id="summaryEp">0</strong></span><span>SP <strong id="summarySp">0</strong></span><span>CP <strong id="summaryCp">0</strong></span></div><div class="wealth-total">总财富 <strong id="wealthSummary">0 GP</strong></div></section>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="workspace-page" data-page-panel="spells" hidden>
+              <section class="page-intro with-action"><div><h2>法术书</h2></div><button id="addSpell" class="secondary" type="button">＋ 添加法术</button></section>
+              <div class="spell-book-context"><label>当前施法职业<select id="spellcastingClass" aria-label="当前施法职业"></select></label><span id="spellClassHint"></span></div>
+              <details class="spell-resources"><summary>施法数据与法术位 <span>展开查看及修改</span></summary><div class="spell-sheet-top"><section class="compact-summary" aria-label="施法摘要"><span>施法属性<strong id="spellAbilitySummary">—</strong></span><span>法术豁免 DC<strong id="spellDcSummary">—</strong></span><span>法术攻击<strong id="spellAttackSummary">—</strong></span><span>已知戏法<strong id="cantripCountSummary">0</strong></span><span>已准备法术<strong id="preparedCountSummary">0</strong></span></section><section class="sheet-section compact-section spell-slots-section"><div class="section-heading"><div><h2>法术位</h2><p>现有 / 上限</p></div><button id="spellSlotAutoFill" class="secondary small-action" type="button" hidden title="按职业和等级重算上限，并将现有法术位设为满额">套用 5E 法术位</button></div><div id="spellSlots" class="spell-slot-grid"></div><p id="spellSlotRuleNote" class="spell-slot-note"></p></section></div></details>
+              <div class="spell-workbench">
+                <section class="sheet-section compact-section spell-detail-panel" aria-labelledby="spellDetailHeading"><div class="section-heading"><div><h2 id="spellDetailHeading">法术查询</h2></div></div><div id="spellInspector"></div></section>
+                <section class="sheet-section collection-section spell-list-section" aria-labelledby="spellListHeading"><div class="section-heading"><div><h2 id="spellListHeading">法术列表</h2><p>点击条目，在左侧法术书编辑名称、环阶与准备状态。</p></div><span id="spellCount" class="completion">0 个</span></div><div id="spellList" class="spell-ledger-list"></div></section>
+              </div>
+            </div>
+
+            <div class="workspace-page" data-page-panel="creatures" hidden>
+              <section class="page-intro with-action"><div><p>部署生物</p><h2>魔宠、伙伴与召唤物</h2><span>按照原表记录身份、战斗、六维、技能、抗性、感官、动作与特质。</span></div><button id="addCreature" class="secondary" type="button">＋ 添加生物</button></section>
+              <section class="sheet-section collection-section" aria-labelledby="creatureListHeading"><div class="section-heading"><div><h2 id="creatureListHeading">当前部署</h2><p>每个生物保留一张独立的小型数据卡。</p></div><span id="creatureCount" class="completion">0 个</span></div><div id="creatureList" class="record-list creature-list"></div></section>
+            </div>
+
+            <div class="workspace-page" data-page-panel="inventory" hidden>
+              <section class="page-intro"><div><p>背包</p><h2>物品、容器与账本</h2><span>按原表分为速查、自述、次元袋 / 载具和货币账本。</span></div></section>
+              <section class="currency-strip" aria-label="货币"><label>铜币<input id="currencyCp" data-currency="cp" type="number" min="0" step="1" inputmode="numeric" /></label><label>银币<input id="currencySp" data-currency="sp" type="number" min="0" step="1" inputmode="numeric" /></label><label>银金币（EP）<input id="currencyEp" data-currency="ep" type="number" min="0" step="1" inputmode="numeric" /></label><label>金币<input id="currencyGp" data-currency="gp" type="number" min="0" step="1" inputmode="numeric" /></label><label>铂金币<input id="currencyPp" data-currency="pp" type="number" min="0" step="1" inputmode="numeric" /></label></section>
+              <section class="inventory-columns"><div class="sheet-section compact-section"><div class="section-heading"><div><h2>速查</h2><p>常用装备与消耗品。</p></div><button id="addInventoryItem" class="secondary small-action" type="button">＋ 添加</button></div><div id="inventoryQuickList" class="record-list"></div></div><div class="sheet-section compact-section"><div class="section-heading"><div><h2>自述</h2><p>自定义物品和长描述。</p></div><button id="addSelfItem" class="secondary small-action" type="button">＋ 添加</button></div><div id="inventorySelfList" class="record-list"></div></div></section>
+              <section class="sheet-section compact-section"><div class="section-heading"><div><h2>次元袋 / 载具</h2><p>单独记录容器、收纳上限与其中物品。</p></div><button id="addContainerItem" class="secondary small-action" type="button">＋ 添加</button></div><div id="inventoryContainerList" class="record-list"></div></section>
+              <section class="sheet-section compact-section"><div class="section-heading"><div><h2>账本笔记</h2><p>收入、支出及结余说明。</p></div><button id="addLedgerEntry" class="secondary small-action" type="button">＋ 添加账目</button></div><div id="ledgerList" class="record-list"></div></section>
+            </div>
+          </form>
+        </div>
+      </main>
+
+      <aside class="profile-pane" aria-label="人物立绘">
+        <section class="portrait-card">
+          <input id="portraitFile" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+          <div class="portrait-stage" id="portraitStage"><img id="portraitImage" alt="人物立绘" hidden /><div id="portraitFallback" class="portrait-fallback" aria-hidden="true"><span id="portraitMonogram">烬</span><small>尚未放入立绘</small></div><div class="portrait-actions"><button id="portraitUpload" type="button">选择立绘</button><button id="portraitClear" type="button">移除</button></div></div>
+          <div class="portrait-caption"><strong id="profileName">烬羽</strong><span id="profileClass">5级 吟游诗人</span></div>
+        </section>
+        <section class="portrait-writing" aria-label="人物外貌文字">
+          <label><span>角色外貌</span><textarea id="appearance" name="appearance" rows="3" maxlength="1200" placeholder="五官、体态与外观特征"></textarea></label>
+          <label><span>角色形象</span><textarea id="characterImage" name="characterImage" rows="3" maxlength="1200" placeholder="服饰、姿态、气质与识别特征"></textarea></label>
+        </section>
+      </aside>
+    </div>
+
+    <div class="assistant-float">
+      <section id="assistantPopover" class="assistant-popover" aria-label="规则助手" hidden>
+        <div class="assistant-scope"><div><strong>填卡助手</strong><span id="assistantScope">等待读取当前人物</span></div><button id="assistantReposition" type="button" title="键盘也可按 Alt + 方向键移动悬浮球">换位置</button><button id="assistantClose" type="button" aria-label="关闭填卡助手">×</button></div>
+        <p id="assistantLiveStatus" class="assistant-live-status" role="status" aria-atomic="true">等待本机检查</p>
+        <div class="assistant-tabs" role="tablist" aria-label="规则助手视图"><button id="rulesTab" class="is-active" data-panel="rules" role="tab" aria-selected="true" aria-controls="panel-rules">计算</button><button id="issuesTab" data-panel="issues" role="tab" aria-selected="false" aria-controls="panel-issues">校验 <span id="issueBadge">0</span></button><button id="adviceTab" data-panel="advice" role="tab" aria-selected="false" aria-controls="panel-advice">建议</button><button id="knowledgeTab" data-panel="knowledge" role="tab" aria-selected="false" aria-controls="panel-knowledge">资料</button></div>
+        <section class="assistant-panel is-active" id="panel-rules" role="tabpanel" aria-labelledby="rulesTab"><label class="assistant-trace-picker">查看数值<select id="assistantTraceSelect"><option value="armorClass">护甲等级</option><option value="hitPoints">最大生命值</option><option value="initiative">先攻</option><option value="proficiencyBonus">熟练加值</option><option value="passivePerception">被动察觉</option><option value="spellSaveDc">法术豁免 DC</option></select></label><p class="crumb" id="traceCrumb">当前人物 / 本机计算</p><div class="trace-result"><span id="traceTitle">—</span><strong id="traceResult">—</strong></div><div class="source-line"><span>计算依据</span><strong id="traceSource">尚未计算</strong></div><dl id="traceTerms" class="assistant-trace-terms"></dl><div class="calculation"><h2>数值合计</h2><code id="traceFormula">—</code></div><ul id="traceSources" class="assistant-trace-sources"></ul><p id="traceNotes" class="rule-copy">选择数值查看当前计算明细。</p></section>
+        <section class="assistant-panel" id="panel-issues" role="tabpanel" aria-labelledby="issuesTab"><p class="crumb">仅检查已实现的规则，不等于整张卡合法性认证</p><h2 id="issueHeading">尚未检查</h2><div id="issueList" class="issue-list"></div></section>
+        <section class="assistant-panel" id="panel-advice" role="tabpanel" aria-labelledby="adviceTab"><p class="crumb">从当前卡的检查结果整理，不擅自授予能力</p><h2 id="adviceHeading">填卡待办</h2><div id="adviceCard" class="assistant-tasks"></div><div class="assistant-ai-state"><h3>AI 状态</h3><p id="assistantAiStatus">正在读取配置状态</p><button id="assistantAiSettings" type="button">查看 API 配置</button></div></section>
+        <section class="assistant-panel" id="panel-knowledge" role="tabpanel" aria-labelledby="knowledgeTab"><p id="assistantLibraryStatus" class="crumb">尚未读取本机资料库</p><button id="assistantLibraryRetry" type="button">刷新资料状态</button><label class="field"><span>查询当前版本资料</span><input id="assistantKnowledgeQuery" type="search" autocomplete="off" placeholder="法术、武器、背景…" /></label><div id="assistantKnowledgeResults" class="assistant-knowledge-results" role="status">输入关键词查找，不会跨规则版本混用。</div><p class="muted-copy">点击结果查看原表字段及出处；无匹配时不会生成替代内容。</p></section>
+      </section>
+      <button id="assistantOrb" class="assistant-orb" type="button" aria-expanded="false" aria-controls="assistantPopover" aria-label="打开规则助手"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V6l-8-4Zm0 3 5 2.5V12c0 3.4-2 6-5 7.2C9 18 7 15.4 7 12V7.5L12 5Zm-1 3v5h2V8h-2Zm0 7v2h2v-2h-2Z"/></svg><span id="assistantIssueDot" hidden></span></button>
+    </div>
+
+    <dialog id="libraryDialog" class="library-dialog" aria-labelledby="libraryTitle">
+      <header class="library-header"><div><p id="libraryEdition">本机资料 / D&D 当前卡</p><h1 id="libraryTitle">资料库</h1></div><button id="libraryClose" class="icon-only" type="button" aria-label="关闭资料库">×</button></header>
+      <div class="library-toolbar"><label class="library-search"><span>名称 / 正文关键词</span><input id="libraryQuery" type="search" autocomplete="off" placeholder="名称；参考正文也支持关键词" /></label><label><span>类别</span><select id="libraryKind"><option value="">全部</option><optgroup label="人物选项"><option value="class">职业</option><option value="background">背景</option><option value="species">种族/物种</option><option value="feat">专长/战斗风格</option></optgroup><optgroup label="法术"><option value="spell">法术</option></optgroup><optgroup label="装备"><option value="weapon">武器</option><option value="armor">护甲</option><option value="item">普通物品</option><option value="tool">工具</option><option value="weapon_mastery">武器精通</option><option value="curio">奇物</option><option value="magic_item">其他魔法物品/神器</option></optgroup><optgroup label="能力"><option value="class_feature">职业能力</option><option value="feature_option">能力选项</option><option value="species_trait">种族特性</option></optgroup><optgroup label="生物与据点"><option value="creature">魔宠/部署生物</option><option value="bastion">据点设施</option></optgroup><optgroup label="规则表"><option value="spell_progression">施法进度</option><option value="reference">规则与资料正文</option></optgroup></select></label><label><span>环阶</span><select id="libraryRank"><option value="">全部</option><option value="0">戏法</option><option value="1">1 环</option><option value="2">2 环</option><option value="3">3 环</option><option value="4">4 环</option><option value="5">5 环</option><option value="6">6 环</option><option value="7">7 环</option><option value="8">8 环</option><option value="9">9 环</option></select></label></div>
+      <div class="library-toolbar library-source-toolbar">
+        <label><span>来源分类</span><select id="librarySourceGroup"><option value="">全部来源</option></select></label>
+        <label><span>书籍 / 资料包</span><select id="libraryBook"><option value="">全部书籍</option></select></label>
+        <button id="libraryResetFilters" type="button">清除筛选</button>
+      </div>
+      <div id="librarySummary" class="library-summary" role="status">正在读取本机资料库…</div>
+      <div class="library-columns"><section class="library-list-panel" aria-label="资料条目"><div class="library-column-heading"><strong>条目</strong><span id="libraryResultCount">—</span></div><div id="libraryResults" class="library-results"></div><div class="library-page-actions"><button id="libraryPrevious" type="button" disabled>上一页</button><span id="libraryPageNumber">1 / 1</span><button id="libraryNext" type="button" disabled>下一页</button></div></section><section class="library-detail-panel" aria-label="资料详情"><div id="libraryDetail" class="library-detail-empty">从左侧选择一条资料，查看原表字段与来源位置。</div></section></div>
+      <footer class="library-footer">资料随包提供，按 5E / 5R 分开；参考正文不等于自动化规则。第三方、测试材料请核对来源，填卡后仍可自由编辑。</footer>
+    </dialog>
+
+    <div id="suggestionPopover" class="suggestion-popover" role="listbox" aria-label="资料建议" hidden></div>
+
+    <dialog id="settingsDialog" class="settings-dialog" aria-labelledby="settingsTitle">
+      <form method="dialog" class="settings-header"><div><p>工作台</p><h1 id="settingsTitle">设置与扩展</h1></div><button id="settingsClose" class="icon-only" value="cancel" aria-label="关闭设置" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.7 5.3 5.3 5.3 5.3-5.3 1.4 1.4-5.3 5.3 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.3-5.3-5.3-5.3 1.4-1.4Z"/></svg></button></form>
+      <div class="settings-body">
+        <section class="settings-section rulebook-settings" aria-labelledby="rulesConfigHeading"><div class="settings-copy"><h2 id="rulesConfigHeading">已载入的规则</h2><p>选择一本查看其本机资料。人物使用的系统在新建时确定，这里只供查询。</p></div><div id="ruleEngineOptions" class="engine-options" aria-label="已载入规则系统"></div><section id="rulebookReader" class="rulebook-reader" aria-label="规则书查询器" hidden><header class="rulebook-header"><div><span>本机规则书</span><h3 id="rulebookTitle">选择规则</h3></div><button id="rulebookClose" class="secondary" type="button">合上规则书</button></header><div class="rulebook-spread"><div class="rulebook-page rulebook-index"><p class="rulebook-page-number">目录</p><p id="rulebookEdition" class="rulebook-edition"></p><p id="rulebookSummary" class="rulebook-summary" role="status">正在读取本机资料…</p><nav id="rulebookKinds" class="rulebook-kinds" aria-label="资料类别"></nav><p class="rulebook-note">资料取自本机导入的表格，未逐条复核；这里不会修改人物卡。</p></div><div class="rulebook-page rulebook-search-page"><p class="rulebook-page-number">检索</p><label class="field"><span>名称关键词</span><input id="rulebookQuery" type="search" autocomplete="off" placeholder="法术、武器、背景……" /></label><div id="rulebookResults" class="rulebook-results">选择左页类别，或直接输入关键词。</div><article id="rulebookDetail" class="rulebook-detail" tabindex="-1"></article></div></div></section></section>
+        <section class="settings-section ai-settings" aria-labelledby="aiConfigHeading"><div class="settings-copy"><h2 id="aiConfigHeading">AI API</h2><p>当前支持 OpenAI 兼容的聊天补全接口。先测试，成功后才能保存配置。</p></div><div class="form-grid two-columns"><label class="field"><span>配置名称</span><input id="aiProfileName" type="text" maxlength="60" placeholder="例如：本地模型" /></label><label class="field"><span>模型名称</span><input id="aiModel" type="text" maxlength="120" placeholder="模型 ID" /></label></div><label class="field"><span>API 地址</span><input id="aiBaseUrl" type="url" maxlength="500" placeholder="https://example.com/v1" /></label><label class="field"><span>API 密钥</span><input id="aiApiKey" type="password" autocomplete="off" placeholder="仅保留在当前会话" /></label><div id="aiTestStatus" class="connection-status" role="status">尚未测试连接。旧配置不会在测试失败时被覆盖。</div><div class="settings-actions"><button id="testAiConnection" class="secondary" type="button">测试连接</button><button id="saveAiSettings" class="primary" type="button" disabled>保存已验证配置</button></div><p class="security-note">当前版本不会把密钥写入人物文件或 localStorage；关闭应用会话后需要重新输入。系统凭据存储尚未接入。</p></section>
+        <section class="settings-section plugin-settings" aria-labelledby="pluginHeading"><div class="settings-copy"><h2 id="pluginHeading">插件与资料包</h2><p>5E、5R、CoC 规则已内置；资料包管理正在载入。</p></div><div class="plugin-row"><span><strong>规则适配器</strong><small>5E、5R、CoC</small></span><button type="button" disabled>正在载入管理器</button></div></section>
+      </div>
+    </dialog>
+
+    <dialog id="createCharacterDialog" class="create-dialog" aria-labelledby="createCharacterTitle">
+      <form id="createCharacterWizard" novalidate>
+        <header class="create-header"><div><p id="createStepLabel">步骤 1 / 2</p><h1 id="createCharacterTitle">先给人物一个身份</h1></div><button id="createCancelTop" class="icon-only" type="button" aria-label="取消新建"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.7 5.3 5.3 5.3 5.3-5.3 1.4 1.4-5.3 5.3 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.3-5.3-5.3-5.3 1.4-1.4Z"/></svg></button></header>
+        <div id="createIdentityStep" class="create-step">
+          <p class="create-lead">人物名与玩家名会直接写入新档案，创建后仍可修改。</p>
+          <label class="field"><span>人物名称</span><input id="createName" type="text" maxlength="60" autocomplete="off" required /></label>
+          <label class="field"><span>玩家名称</span><input id="createPlayer" type="text" maxlength="60" autocomplete="off" required /></label>
+        </div>
+        <div id="createSystemStep" class="create-step" hidden>
+          <p class="create-lead">选择后，这张人物卡的规则版本将固定，职业、法术和装备按该版本查找。若要使用另一版本，请另建人物卡。</p>
+          <div id="createSystemOptions" class="create-system-options"></div>
+          <p id="createSystemSelection" class="create-selection" role="status" aria-live="polite"></p>
+        </div>
+        <p id="createError" class="create-error" role="alert"></p>
+        <footer class="create-footer"><button id="createCancel" class="secondary" type="button">取消</button><span></span><button id="createBack" class="secondary" type="button" hidden>上一步</button><button id="createNext" class="primary" type="button">下一步</button><button id="createConfirm" class="primary" type="submit" hidden>创建人物</button></footer>
+      </form>
+    </dialog>
+
+    <dialog id="exportDialog" class="create-dialog export-dialog" aria-labelledby="exportTitle" aria-describedby="exportDescription">
+      <header class="create-header"><div><p>人物档案</p><h1 id="exportTitle">导出人物卡</h1></div><button id="closeExport" class="secondary" type="button" aria-label="关闭导出">关闭</button></header>
+      <div class="export-content">
+        <p id="exportDescription">选择适合用途的格式。只导出当前人物，不包含 AI 配置或 API 密钥。</p>
+        <section class="export-choice"><div><h2>Excel 人物卡 <span>.xlsx</span></h2><p>人物、主要情况、施法、部署生物、背包，共五张工作表。保留立绘与完整描述，支持编辑和打印。</p></div><button id="exportExcel" class="primary" type="button">导出 Excel</button></section>
+        <section class="export-choice"><div><h2>JSON 完整备份 <span>.json</span></h2><p>用于重新导入应用，恢复人物数据与自动化配置。</p></div><button id="exportJson" class="secondary" type="button">导出 JSON</button></section>
+        <p class="export-note">Excel 是当前人物的排版快照；属性调整值、钱币重量和物品合计带公式，但不包含应用的完整规则引擎，也不能直接导入为人物卡。</p>
+        <p id="exportStatus" class="export-status" role="status" aria-live="polite" aria-atomic="true"></p>
+      </div>
+    </dialog>
+
+    <dialog id="deleteCharacterDialog" class="confirm-dialog" aria-labelledby="deleteCharacterTitle">
+      <form method="dialog">
+        <header><span class="danger-mark" aria-hidden="true">!</span><div><p>删除人物</p><h1 id="deleteCharacterTitle">确认删除人物？</h1></div></header>
+        <p>人物“<strong id="deleteCharacterName">—</strong>”将从本机工作区移除。删除后可在提示消失前撤销。</p>
+        <footer><button id="cancelDeleteCharacter" class="secondary" value="cancel" type="submit">取消</button><button id="confirmDeleteCharacter" class="danger-button" value="default" type="button">删除人物</button></footer>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

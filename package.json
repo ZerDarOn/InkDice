@@ -1,0 +1,21 @@
+{
+  "name": "dnd-character-studio",
+  "version": "0.1.6",
+  "private": true,
+  "description": "墨骰工坊 · 5E / 5R / CoC 本地人物卡",
+  "author": "ZerDarOn",
+  "main": "desktop/main.mjs",
+  "packageManager": "pnpm@11.25.0",
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check prototype/app.js && node --test tests/*.test.mjs",
+    "desktop": "electron .",
+    "desktop:package": "electron-builder --win nsis zip --x64 --publish never",
+    "desktop:package:installer": "electron-builder --win nsis --x64 --publish never",
+    "desktop:package:zip": "electron-builder --win zip --x64 --publish never",
+    "test:installer": "node tools/test-installer.mjs"
+  },
+  "devDependencies": { "electron": "45.0.0", "electron-builder": "26.15.3" }
+}

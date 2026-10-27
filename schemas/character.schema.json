@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/character.schema.json",
+  "title": "DND Character Studio Character",
+  "type": "object",
+  "required": ["schemaVersion", "id", "ruleset", "packPins", "identity", "abilities", "classes", "choices", "resources"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "0.1.0" },
+    "id": { "type": "string", "format": "uuid" },
+    "ruleset": { "enum": ["dnd5e-2014", "dnd5r-2024"] },
+    "packPins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "version", "contentHash"],
+        "properties": {
+          "id": { "type": "string" },
+          "version": { "type": "string" },
+          "contentHash": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "identity": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "player": { "type": "string" },
+        "pronouns": { "type": "string" },
+        "portrait": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "abilities": {
+      "type": "object",
+      "required": ["str", "dex", "con", "int", "wis", "cha"],
+      "additionalProperties": false,
+      "properties": {
+        "str": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "dex": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "con": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "int": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "wis": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "cha": { "type": "integer", "minimum": 1, "maximum": 30 }
+      }
+    },
+    "classes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["classId", "level"],
+        "properties": {
+          "classId": { "type": "string" },
+          "subclassId": { "type": "string" },
+          "level": { "type": "integer", "minimum": 1, "maximum": 20 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "choices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["choiceId", "selection", "source"],
+        "properties": {
+          "choiceId": { "type": "string" },
+          "selection": {},
+          "source": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "current"],
+        "properties": {
+          "id": { "type": "string" },
+          "current": { "type": "integer", "minimum": 0 },
+          "maximumOverride": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "inventory": { "type": "array", "items": { "type": "object" } },
+    "notes": { "type": "string" },
+    "extensions": { "type": "object", "additionalProperties": true }
+  }
+}

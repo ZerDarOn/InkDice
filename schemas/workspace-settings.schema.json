@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/workspace-settings.schema.json",
+  "title": "Character Studio Workspace Settings",
+  "type": "object",
+  "required": ["defaultRuleset"],
+  "additionalProperties": false,
+  "properties": {
+    "defaultRuleset": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]+$",
+      "examples": ["dnd5e-2014", "dnd5r-2024", "coc-7e"]
+    },
+    "aiProfile": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["name", "baseUrl", "model", "testedAt"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+            "baseUrl": { "type": "string", "format": "uri", "maxLength": 500 },
+            "model": { "type": "string", "minLength": 1, "maxLength": 120 },
+            "testedAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      ],
+      "description": "Only non-secret profile metadata is persisted. API keys must be kept in session or an OS credential store."
+    }
+  }
+}

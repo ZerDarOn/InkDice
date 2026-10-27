@@ -1,0 +1,66 @@
+import {app,BrowserWindow,protocol} from 'electron';
+import {mkdtempSync,mkdirSync,writeFileSync} from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createAppHandler,APP_ORIGIN} from '../desktop/protocol.mjs';
+import {openLibrary} from './library.mjs';
+const root=fileURLToPath(new URL('..',import.meta.url)),output=path.join(root,'.codex-tmp/compact-panels');
+mkdirSync(output,{recursive:true});
+app.setPath('userData',mkdtempSync(path.join(os.tmpdir(),'inkdice-compact-panels-')));
+protocol.registerSchemesAsPrivileged([{scheme:'inkdice',privileges:{standard:true,secure:true,supportFetchAPI:true,corsEnabled:true}}]);
+const report={checks:[],errors:[]};let db,finished=false;
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+function finish(){if(finished)return;finished=true;clearTimeout(watchdog);report.ok=report.checks.length>=12&&report.checks.every(c=>c.ok)&&!report.errors.length;writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2));db?.close();app.exit(report.ok?0:1);}
+const watchdog=setTimeout(()=>{report.errors.push('timeout');finish()},55000);
+app.whenReady().then(async()=>{try{
+  db=openLibrary(path.join(root,'local-data/content-library.sqlite'));
+  protocol.handle('inkdice',createAppHandler(root,()=>db));
+  const win=new BrowserWindow({show:false,width:1440,height:1000,webPreferences:{offscreen:true,preload:path.join(root,'desktop/preload.cjs'),contextIsolation:true,sandbox:true,backgroundThrottling:false}});
+  const js=code=>win.webContents.executeJavaScript(code);
+  win.webContents.on('console-message',e=>{if(e.level==='error')report.errors.push(e.message)});
+  await win.loadURL(APP_ORIGIN+'/prototype/styles.css');
+  await js(`(async()=>{
+    const {createCharacter}=await import('/prototype/model.mjs');const {saveWorkspace}=await import('/prototype/store.mjs');
+    const entries=['class','species','fighting','special'].flatMap(kind=>Array.from({length:5},(_,i)=>({id:kind+i,kind,name:kind+'能力'+(i+1),level:kind==='class'?8:0,description:('第'+(i+1)+'条完整描述。').repeat(30)})));
+    entries.push({id:'feat1',kind:'feat',name:'健壮',level:4,advancementSource:'dnd5r-2024:wizard:4',effectMode:'manual'});
+    const c=createCharacter({ruleset:'dnd5r-2024',name:'区块测试',classId:'wizard',level:9,experience:48000,multiclasses:[{classId:'fighter',level:3}],featureEntries:entries});
+    saveWorkspace({characters:[c],activeId:c.id,theme:'dark'});
+  })()`);
+  await win.loadURL(APP_ORIGIN+'/prototype/');await delay(900);
+  await js(`document.querySelector('[data-character-page="summary"]').click()`);
+  for(const width of [1040,1440,1920]){
+    win.setContentSize(width,1000);await delay(140);
+    await js(`document.querySelector('#classFeaturesHeading').scrollIntoView({block:'start',behavior:'instant'})`);await delay(100);
+    report.checks.push(await js(`(()=>{const lists=[...document.querySelectorAll('.feature-scroll-region')];return {name:'three-row-cap-${width}',ok:lists.length===5&&lists.every(list=>{const rows=[...list.querySelectorAll('.feature-ledger-row')];return rows.length<=3||list.scrollHeight>list.clientHeight+20&&Math.abs(list.clientHeight-rows.slice(0,3).reduce((s,r)=>s+r.getBoundingClientRect().height,0))<=2})}})()`));
+    writeFileSync(path.join(output,width+'-panels.png'),(await win.webContents.capturePage()).toPNG());
+  }
+  report.checks.push(await js(`(()=>{const list=document.getElementById('classFeatureRows');list.scrollTop=120;return {name:'independent-scroll-hidden-bar',ok:list.scrollTop>0&&getComputedStyle(list).scrollbarWidth==='none'&&document.getElementById('speciesFeatureRows').scrollTop===0}})()`));
+  report.checks.push(await js(`(()=>{const list=document.getElementById('classFeatureRows');list.scrollTop=0;list.querySelector('textarea').dispatchEvent(new WheelEvent('wheel',{deltaY:100,bubbles:true,cancelable:true}));return {name:'wheel-over-description-scrolls-list',ok:list.scrollTop>0&&list.querySelector('textarea').scrollTop===0}})()`));
+  await js(`document.getElementById('classFeatureRows').closest('section').querySelector('[data-expand-features]').click()`);await delay(180);
+  report.checks.push(await js(`({name:'modal-all-records-single-editor',ok:document.querySelector('.feature-reader-dialog').open&&document.querySelectorAll('#classFeatureRows').length===1&&document.querySelector('.feature-reader-dialog #classFeatureRows').style.maxHeight==='none'&&document.querySelectorAll('.feature-reader-dialog .feature-ledger-row').length===5})`));
+  writeFileSync(path.join(output,'expanded.png'),(await win.webContents.capturePage()).toPNG());
+  await js(`let t=document.querySelector('.feature-reader-dialog textarea');t.value='弹窗修改保留';t.dispatchEvent(new Event('input',{bubbles:true}));document.querySelector('[data-add-feature="class"]').click()`);await delay(100);
+  report.checks.push(await js(`({name:'modal-add-and-edit',ok:document.querySelectorAll('.feature-reader-dialog .feature-ledger-row').length===6&&document.querySelector('.feature-reader-dialog textarea').value==='弹窗修改保留'})`));
+  await js(`document.querySelector('[data-close-feature-reader]').click()`);await delay(80);
+  report.checks.push(await js(`({name:'modal-close-restores-field-and-focus',ok:!document.querySelector('.feature-reader-dialog').open&&document.querySelector('#classFeatureRows textarea').value==='弹窗修改保留'&&document.activeElement.matches('[data-expand-features]')&&document.querySelector('#classFeatureRows').closest('.workspace-page')!==null})`));
+  await js(`document.querySelector('.subclass-combo button').click()`);await delay(250);
+  report.checks.push(await js(`({name:'single-combo-primary',ok:!document.querySelector('#subclassPicker')&&document.querySelectorAll('#subclass').length===1&&document.querySelectorAll('#suggestionPopover [data-suggestion-index]').length>0})`));
+  await js(`document.querySelector('#suggestionPopover [data-suggestion-index]').click()`);await delay(120);
+  report.checks.push(await js(`({name:'primary-select-updates-value',ok:document.getElementById('subclass').value.length>0})`));
+  await js(`document.querySelector('#multiclassRows [data-subclass-dropdown]').click()`);await delay(250);
+  report.checks.push(await js(`({name:'multiclass-filtered-dropdown',ok:document.querySelector('#suggestionPopover .suggestion-caption').textContent.includes('战士')&&document.querySelectorAll('#multiclassRows [data-class-field="subclass"]').length===1&&!document.querySelector('#multiclassRows [data-subclass-choice]')&&document.querySelectorAll('#suggestionPopover [data-suggestion-index]').length>0})`));
+  await js(`document.querySelector('#suggestionPopover [data-suggestion-index]').click()`);await delay(80);
+  await js(`let s=document.querySelector('#multiclassRows [data-class-field="subclass"]');s.value='自定义流派';s.dispatchEvent(new Event('change',{bubbles:true}))`);
+  report.checks.push(await js(`({name:'custom-subclass-input',ok:document.querySelector('#multiclassRows [data-class-field="subclass"]').value==='自定义流派'})`));
+  await js(`document.querySelector('[data-add-weapon]').scrollIntoView({block:'center',behavior:'instant'})`);await delay(80);
+  report.checks.push(await js(`(()=>{const a=document.querySelector('[data-add-weapon]'),b=document.getElementById('attunementCounter'),x=a.getBoundingClientRect(),y=b.getBoundingClientRect();return {name:'plus-next-to-attunement',ok:a.textContent.trim()==='＋'&&y.left-x.right<=9&&x.right<=y.left&&Math.abs((x.top+x.bottom-y.top-y.bottom)/2)<2}})()`));
+  await js(`document.querySelector('[data-reset-level]').click()`);await delay(180);
+  report.checks.push(await js(`({name:'reset-requires-confirmation',ok:document.getElementById('levelResetDialog').open&&document.getElementById('level').value==='9'})`));
+  await js(`document.querySelector('[data-reset-confirm]').click()`);await delay(120);
+  report.checks.push(await js(`(()=>{const values={level:document.getElementById('level').value,multiclasses:document.querySelectorAll('.multiclass-row').length,xp:document.getElementById('experience').value,subclass:document.getElementById('subclass').value,caption:document.getElementById('profileClass').textContent,rows:document.querySelectorAll('#classFeatureRows .feature-ledger-row').length,dice:document.getElementById('hitDiceCurrent').value};return {name:'reset-linked-display',values,ok:values.level==='1'&&values.multiclasses===0&&values.xp==='0'&&values.subclass===''&&values.caption.replaceAll(' ','').includes('1级')&&values.rows===6&&values.dice==='1'}})()`));
+  await js(`document.getElementById('toastAction').click()`);await delay(100);
+  report.checks.push(await js(`({name:'undo-reset',ok:document.getElementById('level').value==='9'&&document.querySelectorAll('.multiclass-row').length===1&&document.querySelector('#multiclassRows [data-class-field="subclass"]').value==='自定义流派'})`));
+  await js(`document.getElementById('saveButton').click()`);await delay(80);await win.reload();await delay(700);
+  report.checks.push(await js(`({name:'persist-modal-and-custom-input',ok:document.querySelector('#classFeatureRows textarea').value==='弹窗修改保留'&&document.querySelector('#multiclassRows [data-class-field="subclass"]').value==='自定义流派'})`));
+}catch(error){report.errors.push(error.stack)}finish();});
