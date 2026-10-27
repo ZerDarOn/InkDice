@@ -1,0 +1,37 @@
+name: 问题与建议
+description: 反馈使用问题、排版问题或功能建议
+title: "[反馈] "
+body:
+  - type: markdown
+    attributes:
+      value: "感谢帮助完善墨骰工坊。请勿上传 API 密钥、私人存档或完整规则资料。"
+  - type: input
+    id: version
+    attributes:
+      label: 软件版本
+      placeholder: 例如 0.1.6
+    validations:
+      required: true
+  - type: dropdown
+    id: system
+    attributes:
+      label: 使用的系统
+      options:
+        - 5E（2014）
+        - 5R（2024）
+        - CoC 七版
+        - 通用界面 / 安装 / 其他
+    validations:
+      required: true
+  - type: textarea
+    id: feedback
+    attributes:
+      label: 问题或建议
+      description: 请描述复现步骤、预期结果和实际结果；功能建议可直接说明需求。
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 补充信息或截图
+      description: 请先遮挡私人信息，不要附上未经清理的完整人物卡。
